@@ -36,15 +36,8 @@ function statusBadge(status) {
   return { label: status || "Unknown", tone: "warn", sub: "" };
 }
 
-function pickBestFlight(data, flightNumber) {
-  if (!Array.isArray(data) || data.length === 0) return null;
-
-  const target = (flightNumber || "").trim().toUpperCase();
-
-  const exact = data.find((x) => (x?.flight?.iata || "").toUpperCase() === target);
-  if (exact) return exact;
-
-  return data[0];
+function stripSpaces(str) {
+  return (str || "").replace(/\s/g, "");
 }
 
 export default function FlightSearch() {
@@ -62,19 +55,19 @@ export default function FlightSearch() {
 
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
-  const [flight, setFlight] = useState(null);
+  const [flights, setFlights] = useState([]);
 
   async function onSearch(e) {
     e.preventDefault();
     setError("");
-    setFlight(null);
+    setFlights([]);
 
     if (!apiKey) {
       setError("Missing API key.");
       return;
     }
 
-    const fn = flightNumber.trim().toUpperCase();
+    const fn = stripSpaces(flightNumber).toUpperCase();
     if (!fn) {
       setError("Please enter a valid flight number");
       return;
@@ -107,22 +100,19 @@ export default function FlightSearch() {
       }
 
       const data = Array.isArray(json?.data) ? json.data : [];
-      const best = pickBestFlight(data, fn);
 
-      if (!best) {
+      if (data.length === 0) {
         throw new Error(
           "No flights found for that flight number right now. Try another flight number or try again later."
         );
       }
-      setFlight(best);
+      setFlights(data);
     } catch (err) {
       setError(err?.message || "Could not fetch flight data.");
     } finally {
       setLoading(false);
     }
   }
-
-  const badge = statusBadge(flight?.flight_status);
 
   return (
     <div className="fsPage">
@@ -141,7 +131,7 @@ export default function FlightSearch() {
             icon="✈️"
             placeholder="Flight Number"
             value={flightNumber}
-            onChange={(e) => setFlightNumber(e.target.value)}
+            onChange={(e) => setFlightNumber(stripSpaces(e.target.value))}
           />
 
           <div className="fsDivider" />
@@ -161,13 +151,18 @@ export default function FlightSearch() {
 
       {error && <div className="fsError">{error}</div>}
 
-      {flight && (
-  <FlightResultCard
-    flight={flight}
-    badge={badge}
-    formatDateTime={formatDateTime}
-  />
-  )}
+      {flights.length > 0 && (
+        <div className="fsCardList">
+          {flights.map((flight, index) => (
+            <FlightResultCard
+              key={flight.flight?.icao ?? flight.flight?.iata ?? index}
+              flight={flight}
+              badge={statusBadge(flight?.flight_status)}
+              formatDateTime={formatDateTime}
+            />
+          ))}
+        </div>
+      )}
     </div>
   );
 }
