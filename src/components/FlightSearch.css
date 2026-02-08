@@ -1,0 +1,13 @@
+.fsPage {
+  background: transparent;
+  padding: 0;
+}
+
+.fsError {
+  margin-top: 12px;
+  padding: 10px 12px;
+  border-radius: 4px;
+  background: #ffe9e9;
+  color: #8a1f1f;
+  border: 1px solid #ffb9b9;
+}

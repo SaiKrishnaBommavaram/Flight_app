@@ -1,0 +1,75 @@
+.fsTopbar {
+  background: #d7dde6;
+  border-radius: 4px;
+  padding: 10px;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.25);
+}
+
+.fsFormBar {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr auto 0.8fr auto;
+  align-items: stretch;
+  overflow: hidden;
+  border-radius: 4px;
+  background: #eef2f7;
+  border: 1px solid #c9d1dd;
+}
+
+.fsSeg {
+  display: flex;
+  align-items: center;
+  padding: 10px 12px;
+  background: #eef2f7;
+}
+
+.fsIcon {
+  opacity: 0.65;
+  margin-right: 10px;
+  font-size: 16px;
+}
+
+.fsSegInput {
+  width: 100%;
+  border: none;
+  outline: none;
+  background: transparent;
+  font-size: 14px;
+  color: #111827;
+}
+
+.fsSegInput::placeholder {
+  color: #6b7280;
+}
+
+.fsDivider {
+  width: 1px;
+  background: #c9d1dd;
+}
+
+.fsSearchBtn {
+  border: none;
+  background: #546a86;
+  color: #fff;
+  font-weight: 800;
+  padding: 0 18px;
+  letter-spacing: 0.5px;
+  cursor: pointer;
+}
+
+.fsSearchBtn:disabled {
+  opacity: 0.75;
+  cursor: not-allowed;
+}
+
+/* Responsive */
+@media (max-width: 950px) {
+  .fsFormBar {
+    grid-template-columns: 1fr;
+  }
+  .fsDivider {
+    display: none;
+  }
+  .fsSearchBtn {
+    padding: 12px 18px;
+  }
+}
