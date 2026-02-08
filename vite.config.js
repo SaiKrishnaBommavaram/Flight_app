@@ -10,4 +10,8 @@ export default defineConfig({
       },
     }),
   ],
+  base: '/Flight_app',
+  build:{
+    outDir: 'docs',
+  }
 })
